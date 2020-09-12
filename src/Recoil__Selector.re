@@ -28,7 +28,7 @@ type fn('a) =
 
 type asyncSelectorConfig('value) = {
   key: string,
-  get: getValue(Js.Promise.t('value)),
+  get: getValue(Promise.t('value)),
 };
 
 type selectorConfigFromRecoilValue('value, 'mode) = {
@@ -49,12 +49,12 @@ type selectorFamilyWithWriteConfig('parameter, 'value) = {
 
 type asyncSelectorFamilyConfig('parameter, 'value) = {
   key: string,
-  get: 'parameter => fn(getValue(Js.Promise.t('value))),
+  get: 'parameter => fn(getValue(Promise.t('value))),
 };
 
 type asyncSelectorFamilyWithWriteConfig('parameter, 'value) = {
   key: string,
-  get: 'parameter => fn(getValue(Js.Promise.t('value))),
+  get: 'parameter => fn(getValue(Promise.t('value))),
   set: 'parameter => fn(setValue('value)),
 };
 

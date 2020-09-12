@@ -357,12 +357,11 @@ module UseRecoilCallbackComponent = {
       Recoil.useRecoilCallback0(({snapshot: {getPromise}}, _) => {
         let _ =
           getPromise(atomForCallback)
-          ->Js.Promise.then_(
+          ->Promise.flatMap(
               value => {
                 onCallback(value);
-                Js.Promise.resolve();
+                Promise.resolved();
               },
-              _,
             );
         ();
       });
@@ -418,13 +417,12 @@ module UseUncurriedRecoilCallbackComponent = {
     let onClick =
       Recoil.Uncurried.useRecoilCallback0(({snapshot: {getPromise}}, _) => {
         getPromise(atomForUncurriedCallback)
-        ->Js.Promise.then_(
-            value => {
-              onCallback(value);
-              Js.Promise.resolve();
-            },
-            _,
-          )
+        ->Promise.flatMap(
+              value => {
+                onCallback(value);
+                Promise.resolved();
+              },
+            )
         ->ignore;
         ();
       });

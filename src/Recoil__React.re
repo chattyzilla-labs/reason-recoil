@@ -48,7 +48,7 @@ type mutableSnapshot = {
 type snapshot = {
   getPromise:
     'value 'mode.
-    Recoil__Value.t('value, 'mode) => Js.Promise.t('value),
+    Recoil__Value.t('value, 'mode) => Promise.t('value),
 
   getLoadable:
     'value 'mode.
@@ -56,7 +56,7 @@ type snapshot = {
 
   map: (mutableSnapshot => unit) => snapshot,
   asyncMap:
-    (mutableSnapshot => Js.Promise.t(unit)) => Js.Promise.t(snapshot),
+    (mutableSnapshot => Promise.t(unit)) => Promise.t(snapshot),
 };
 
 type callbackParam = {

@@ -31,7 +31,7 @@ type atomFamily('parameter, 'value) = 'parameter => 'value;
 external atom: atomConfig('value) => readWrite('value) = "atom";
 
 [@bs.module "recoil"]
-external asyncAtom: atomConfig(Js.Promise.t('value)) => readWrite('value) =
+external asyncAtom: atomConfig(Promise.t('value)) => readWrite('value) =
   "atom";
 
 [@bs.module "recoil"]
@@ -46,7 +46,7 @@ external atomFamily:
 
 [@bs.module "recoil"]
 external asyncAtomFamily:
-  atomFamilyConfig('parameter, Js.Promise.t('value)) =>
+  atomFamilyConfig('parameter, Promise.t('value)) =>
   atomFamily('parameter, readWrite('value)) =
   "atomFamily";
 
@@ -87,7 +87,7 @@ type fn('a) =
 
 type asyncSelectorConfig('value) = {
   key: string,
-  get: getValue(Js.Promise.t('value)),
+  get: getValue(Promise.t('value)),
 };
 
 type selectorConfigFromRecoilValue('value, 'mode) = {
@@ -108,12 +108,12 @@ type selectorFamilyWithWriteConfig('parameter, 'value) = {
 
 type asyncSelectorFamilyConfig('parameter, 'value) = {
   key: string,
-  get: 'parameter => fn(getValue(Js.Promise.t('value))),
+  get: 'parameter => fn(getValue(Promise.t('value))),
 };
 
 type asyncSelectorFamilyWithWriteConfig('parameter, 'value) = {
   key: string,
-  get: 'parameter => fn(getValue(Js.Promise.t('value))),
+  get: 'parameter => fn(getValue(Promise.t('value))),
   set: 'parameter => fn(setValue('value)),
 };
 
@@ -198,8 +198,8 @@ module Loadable: {
   [@bs.get] external state: t('value) => State.t = "state";
 
   [@bs.send] external getValue: t('value) => 'value = "getValue";
-  [@bs.send]
-  external toPromise: t('value) => Js.Promise.t('value) = "toPromise";
+
+  let toPromise: t('a) => Promise.t(result('a, 'b))
 
   [@bs.send] [@bs.return undefined_to_opt]
   external valueMaybe: t('value) => option('value) = "valueMaybe";
@@ -209,15 +209,15 @@ module Loadable: {
   [@bs.send] external errorOrThrow: t('value) => 'error = "errorOrThrow";
 
   [@bs.send] [@bs.return undefined_to_opt]
-  external promiseMaybe: t('value) => option(Js.Promise.t('value)) =
+  external promiseMaybe: t('value) => option(Promise.t('value)) =
     "promiseMaybe";
   [@bs.send]
-  external promiseOrThrow: t('value) => Js.Promise.t('value) =
+  external promiseOrThrow: t('value) => Promise.t('value) =
     "promiseOrThrow";
 
   [@bs.send] external map: (t('value), 'value => 'b) => t('b) = "map";
   [@bs.send]
-  external mapAsync: (t('value), 'value => Js.Promise.t('b)) => t('b) =
+  external mapAsync: (t('value), 'value => Promise.t('b)) => t('b) =
     "map";
 };
 
@@ -252,11 +252,11 @@ type mutableSnapshot = {
 };
 
 type snapshot = {
-  getPromise: 'value 'mode. t('value, 'mode) => Js.Promise.t('value),
+  getPromise: 'value 'mode. t('value, 'mode) => Promise.t('value),
   getLoadable: 'value 'mode. t('value, 'mode) => Loadable.t('value),
   map: (mutableSnapshot => unit) => snapshot,
   asyncMap:
-    (mutableSnapshot => Js.Promise.t(unit)) => Js.Promise.t(snapshot),
+    (mutableSnapshot => Promise.t(unit)) => Promise.t(snapshot),
 };
 
 type callbackParam = {

@@ -7,27 +7,22 @@ type user = {
   avatar: string,
 };
 
+[@bs.val]
+external setTimeout: (unit => unit, int) => unit = "setTimeout";
+
 let getUserMock = (~id) => {
-  Js.Promise.make((~resolve, ~reject as _) => {
-    switch (id) {
-    | "" => resolve(. None)
+  switch (id) {
+    | "" => Promise.resolved(None)
     | _ =>
-      let _ =
-        Js.Global.setTimeout(
-          () => {
-            resolve(.
-              Some({
-                id,
-                username: "User " ++ id,
-                avatar: {j|https://avatars.githubusercontent.com/$id?size=64|j},
-              }),
-            )
-          },
-          1_000,
-        );
-      ();
+      Promise.exec(resolve => setTimeout(() => {
+          resolve(Some({
+            id,
+            username: "User " ++ id,
+            avatar: {j|https://avatars.githubusercontent.com/$id?size=64|j},
+          }))
+        },
+        1000));
     }
-  });
 };
 
 let userState =

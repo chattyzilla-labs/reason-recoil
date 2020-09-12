@@ -1,5 +1,5 @@
 {
-  "name": "reason-recoil",
+  "name": "chattyzilla-reason-recoil",
   "version": "0.10.0",
   "scripts": {
     "build": "bsb -make-world",
@@ -47,5 +47,8 @@
     "transformIgnorePatterns": [
       "node_modules/(?!(bs-platform|reason-react|reason-react-compat|reason-react-update|bs-webapi|bs-css|bs-css-emotion)/)"
     ]
+  },
+  "dependencies": {
+    "reason-promise": "^1.1.1"
   }
 }

@@ -16,7 +16,7 @@ external atom: atomConfig('value) => Recoil__Value.readWrite('value) =
 
 [@bs.module "recoil"]
 external asyncAtom:
-  atomConfig(Js.Promise.t('value)) => Recoil__Value.readWrite('value) =
+  atomConfig(Promise.t('value)) => Recoil__Value.readWrite('value) =
   "atom";
 
 [@bs.module "recoil"]
@@ -32,7 +32,7 @@ external atomFamily:
 
 [@bs.module "recoil"]
 external asyncAtomFamily:
-  atomFamilyConfig('parameter, Js.Promise.t('value)) =>
+  atomFamilyConfig('parameter, Promise.t('value)) =>
   atomFamily('parameter, Recoil__Value.readWrite('value)) =
   "atomFamily";
 

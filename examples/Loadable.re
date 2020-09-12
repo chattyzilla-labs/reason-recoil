@@ -6,22 +6,18 @@ type user = {
   username: string,
   avatar: string,
 };
+[@bs.val]
+external setTimeout: (unit => unit, int) => unit = "setTimeout";
 
 let getUserMock = (~id) => {
-  Js.Promise.make((~resolve, ~reject as _) => {
-    let _ =
-      Js.Global.setTimeout(
-        () => {
-          resolve(. {
+  Promise.exec(resolve => setTimeout(() => {
+          resolve({
             id,
             username: "User " ++ id,
             avatar: {j|https://avatars.githubusercontent.com/$id?size=64|j},
           })
         },
-        1000,
-      );
-    ();
-  });
+        1000));
 };
 
 let userState =
@@ -80,10 +76,11 @@ module UserCard = {
          * when component gets mounted.
          */
         Recoil.Loadable.toPromise(userLoadable)
-        |> Js.Promise.then_(user => {
-             Js.log(user);
-             Js.Promise.resolve();
-           })
+        ->Promise.flatMap(
+              value => {
+                Promise.resolved(value);
+              }
+            )
         |> ignore;
         None;
       },
